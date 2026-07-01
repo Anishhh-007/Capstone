@@ -7,6 +7,6 @@ spec:
     app:  sandbox
   type:  ClusterIP 
   ports:
-  - name:  main-sandbox-port
+  - name:  sandbox-port
     port:  80
     targetPort:  3000
