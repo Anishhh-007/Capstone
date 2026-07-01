@@ -16,6 +16,7 @@ spec:
     spec:
       containers:
       - image:  sandbox:latest
+        imagePullPolicy: IfNotPresent
         name:  main-sandbox-container
         resources:
           limits:
