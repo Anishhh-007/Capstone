@@ -25,7 +25,7 @@ export async function createPod(sandboxId) {
                         },
                         requests :{
                             cpu : "250m",
-                            memory: "500Mi"
+                            memory: "16Mi"
                         }
                     }
                 }
