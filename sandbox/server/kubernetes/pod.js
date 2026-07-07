@@ -21,11 +21,11 @@ export async function createPod(sandboxId) {
                     resources :{
                         limits:{
                             cpu: "500m",
-                            memory: "16Mi"
+                            memory: "1Gi"
                         },
                         requests :{
                             cpu : "250m",
-                            memory: "16Mi"
+                            memory: "500Mi"
                         }
                     }
                 }

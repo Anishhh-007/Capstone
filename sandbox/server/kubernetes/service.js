@@ -5,7 +5,7 @@ export const createService = async (sandboxId) =>{
         metadata : {
             name: `sandbox-service-${sandboxId}`,
             labels : {
-                app: "sandbox",
+                app: 'sandbox',
                 sandboxId : sandboxId
             }
         },
