@@ -4,22 +4,25 @@ const app = express()
 
 
 
-app.get("/api/sandbox/healthz" , (req , res) =>{
+app.get("/api/sandbox/healthz", (req, res) => {
     res.status(200).json({
-        message:"Router service is healthy"
+        message: "Router service is healthy"
     })
 })
 
-app.get("/api/sandbox/readyz" , (req , res) =>{
+app.get("/api/sandbox/readyz", (req, res) => {
     res.status(200).json({
-        message:"Router service is ready"
+        message: "Router service is ready"
     })
 })
 
 const proxies = {}
+const agentProxies = {}
 
-const getProxy = (sandboxId , target) =>{
-    if(!proxies[sandboxId]) {
+const getProxy = (sandboxId) => {
+    const target = `http://sandbox-service-${sandboxId}`
+
+    if (!proxies[sandboxId]) {
         proxies[sandboxId] = createProxyMiddleware({
             target,
             changeOrigin: true,
@@ -28,13 +31,28 @@ const getProxy = (sandboxId , target) =>{
     }
     return proxies[sandboxId]
 }
+const getAgentProxy = (sandboxId) => {
+    const target = `http://sandbox-service-${sandboxId}:3000`
 
-app.use((req , res , next) =>{
+    if (!agentProxies[sandboxId]) {
+        agentProxies[sandboxId] = createProxyMiddleware({
+            target,
+            changeOrigin: true,
+            ws: true
+        })
+    }
+    return agentProxies[sandboxId]
+}
+
+app.use((req, res, next) => {
     const host = req.headers.host
     const sandboxId = host.split('.')[0]
-    console.log("Ya samma chai audaichha hai")
-    const target = `http://sandbox-service-${sandboxId}`
-   return  getProxy(sandboxId , target)(req,res,next)
+    if (host.split('.')[1] === "agent") {
+        return getAgentProxy(sandboxId)(req, res, next)
+    } else if (host.split('.')[1] === 'preview') {
+        return getProxy(sandboxId)(req, res, next)
+
+    }
 })
 
 
